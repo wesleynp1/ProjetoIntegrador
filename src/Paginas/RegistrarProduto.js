@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View, ScrollView, Text, TextInput, Button} from 'react-native';
+import {View, ScrollView, Text, TextInput, Button, TouchableOpacity} from 'react-native';
 import TextoPadrão from '../Estilos/TextoPadrao';
 
 class RegistrarProduto extends Component
@@ -24,7 +24,10 @@ class RegistrarProduto extends Component
         <View style={{backgroundColor: 'red'}}>
           <Text style={TextoPadrão.TituloDaPagina}>Registrar Produtos</Text>
 
-          <View>
+          <View style={{alignItems:'center'}}>
+            <TouchableOpacity onPress={()=>{this.props.navegacao.navigate('Foto do Produto')}} style={{width:96,height:96,backgroundColor:'grey',alignItems:'center'}}>
+              <Text style={{textAlign:'center',fontSize:12}}>Clique aqui para adicionar uma foto ao produto</Text>
+            </TouchableOpacity>
             <TextInput style={TextoPadrão.Digitado} placeholderTextColor="white" onChangeText={(t)=>this.NovoProduto.nome=t} placeholder={'Digite o nome do produto aqui'}/>
             <TextInput style={TextoPadrão.Digitado} placeholderTextColor="white" onChangeText={(t)=>this.NovoProduto.preco=t} placeholder={'Digite o preço do produto aqui(apenas números)'} keyboardType="numeric"/>
             <Button title='Registrar produto' onPress={this.registrarProduto}/>

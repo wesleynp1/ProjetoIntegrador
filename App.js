@@ -3,6 +3,7 @@ import {View, Text} from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator} from '@react-navigation/stack';
 
 import PaginaInicial from './src/Paginas/PaginaInicial';
 import RegistrarProduto from './src/Paginas/RegistrarProduto';
@@ -14,6 +15,7 @@ import ProdutosContent from './src/Classes/ProdutosContent';
 import VendasContent from './src/Classes/VendasContent';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const db = new Database();
 const PC = new ProdutosContent(db);
@@ -32,21 +34,40 @@ class App extends Component
 
   render()
   {
-    let pagProdutos = ()=>{return(<RegistrarProduto produtosControle={PC}/>);}
     let pagVendas = ()=>{return(<RegistrarVendas vendasControle={VC} produtosControle={PC}/>);}
-    let pagInicial = ()=>{return(<PaginaInicial ref={componente => this.paginaEstatistica=componente} vendasControle={VC} produtosControle={PC}/>);}
 
     return(
       <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name={'Página Inicial'} component={pagInicial}/>
-          <Tab.Screen name={'Registrar Produto'} component={pagProdutos}/>
-          <Tab.Screen name={'Registrar Venda'} component={pagVendas}/>
+          <Tab.Navigator>
+            <Tab.Screen name="Página Inicial">
+              
+              {()=>{return <PaginaInicial ref={PagEstatistica=>{this.paginaEstatistica = PagEstatistica}}  vendasControle={VC}/>}}
+            </Tab.Screen>
+
+            <Tab.Screen name={'Registrar Produto'}>
+            {()=>{return this.renderStackProdutos()}}
+            </Tab.Screen>
+            <Tab.Screen name={'Registrar Venda'} component={pagVendas}/>
         </Tab.Navigator>
       </NavigationContainer>
     );
   }
 
+  renderStackProdutos()
+  {
+    return(
+    <Stack.Navigator screenOptions={{headerShown:false}}>
+      <Stack.Screen name='PaginaProdutos'>
+      {({navigation})=>{return(<RegistrarProduto navegacao={navigation} produtosControle={PC}/>);}}
+      </Stack.Screen>
+
+      <Stack.Screen options={{headerShown:true}} name='Foto do Produto'>
+        {()=>{return <View><Text>TESTE REALIZADO COM SUCESSO</Text></View>;}}
+      </Stack.Screen>
+    </Stack.Navigator>
+    );
+  }
+  
   atualizarPaginas()
   {
     this.paginaEstatistica.atualizar();
