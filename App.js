@@ -8,6 +8,7 @@ import { createStackNavigator} from '@react-navigation/stack';
 import PaginaInicial from './src/Paginas/PaginaInicial';
 import RegistrarProduto from './src/Paginas/RegistrarProduto';
 import RegistrarVendas from './src/Paginas/RegistrarVendas';
+import PaginaCamera from './src/Paginas/PaginaCamera';
 
 import Database from './Database';
 
@@ -62,7 +63,7 @@ class App extends Component
       </Stack.Screen>
 
       <Stack.Screen options={{headerShown:true}} name='Foto do Produto'>
-        {()=>{return <View><Text>TESTE REALIZADO COM SUCESSO</Text></View>;}}
+        {()=>{return <PaginaCamera/>;}}
       </Stack.Screen>
     </Stack.Navigator>
     );

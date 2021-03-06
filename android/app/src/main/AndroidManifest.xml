@@ -2,6 +2,12 @@
   package="com.meunegocio">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Permissão para acessar a câmera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Permissão para fazer leitura do armazenamento -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- Permissão para fazer escrita no armazenamento -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
       android:name=".MainApplication"
