@@ -19,7 +19,7 @@ export default class Database{
 
                     bd.executeSql('SELECT 1 FROM Produtos LIMIT 1').catch((error)=>{
                         bd.transaction((tx)=>{
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS Produtos(IdProduto INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Nome VARCHAR(200), Preco DECIMAL(10,2))');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS Produtos(IdProduto INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,Nome VARCHAR(200), Imagem VARCHAR(200), Preco DECIMAL(10,2))');
                         }).then(()=>{
                             console.log('Tabela Produtos criada com sucesso!!!');
                         }).catch((erro)=>{console.log('FALHOU EM CRIAR A TABELA PRODUTOS: '+erro);})});
@@ -61,7 +61,7 @@ export default class Database{
             var len = results.rows.length;
             
             for (let i = 0; i < len; i++) {
-              var novoProduto = {id: results.rows.item(i).IdProduto, nome: results.rows.item(i).Nome, preco: results.rows.item(i).Preco};
+              var novoProduto = {id: results.rows.item(i).IdProduto, nome: results.rows.item(i).Nome, imagem: results.rows.item(i).Imagem, preco: results.rows.item(i).Preco};
               Produtos.push(novoProduto);
             }
             resolve(Produtos);
@@ -81,14 +81,10 @@ export default class Database{
         return new Promise((resolve) => {
         this.IniciaBD().then((db) => {
             db.transaction((tx) => {
-            tx.executeSql('INSERT INTO Produtos(Nome, Preco) VALUES (?, ?)', [Produto.nome, Produto.preco]).then(([tx, results]) => {
-              console.log('database: ANTES DO RESOLVE');
+            tx.executeSql('INSERT INTO Produtos(Nome,Imagem,Preco) VALUES (?,?,?)', [Produto.nome, Produto.imagem, Produto.preco]).then(([tx, results]) => {
               resolve(results);
-              console.log('database: APOS O RESOLVE');  
             })}).then(() => {
-              console.log('database: ANTES DO fechaBD');
             this.fechaBD(db);
-              console.log('database: APOS O fechaBD');
             }).catch((err) => {
             console.log('database: Erro ao adicionar o Produto: '+err);
             });

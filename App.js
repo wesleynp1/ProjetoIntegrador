@@ -9,6 +9,7 @@ import PaginaInicial from './src/Paginas/PaginaInicial';
 import RegistrarProduto from './src/Paginas/RegistrarProduto';
 import RegistrarVendas from './src/Paginas/RegistrarVendas';
 import PaginaCamera from './src/Paginas/PaginaCamera';
+import PaginaGaleria from './src/Paginas/PaginaGaleria';
 
 import Database from './Database';
 
@@ -59,11 +60,15 @@ class App extends Component
     return(
     <Stack.Navigator screenOptions={{headerShown:false}}>
       <Stack.Screen name='PaginaProdutos'>
-      {({navigation})=>{return(<RegistrarProduto navegacao={navigation} produtosControle={PC}/>);}}
+        {({route,navigation})=>{return(<RegistrarProduto rota={route} navegacao={navigation} produtosControle={PC}/>);}}
       </Stack.Screen>
 
       <Stack.Screen options={{headerShown:true}} name='Foto do Produto'>
-        {()=>{return <PaginaCamera/>;}}
+        {({navigation})=>{return <PaginaCamera navegacao={navigation}/>;}}
+      </Stack.Screen>
+
+      <Stack.Screen options={{headerShown:true}} name='Fotos Salvas'>
+        {({navigation})=>{return <PaginaGaleria navegacao={navigation}/>;}}
       </Stack.Screen>
     </Stack.Navigator>
     );

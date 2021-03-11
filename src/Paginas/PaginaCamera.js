@@ -30,7 +30,7 @@ class PaginaCamera extends Component
               <Text>Tirar foto</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{flex: 1,backgroundColor:'blue',margin: 8}}>
+          <TouchableOpacity onPress={()=>{this.props.navegacao.navigate("Fotos Salvas")}} style={{flex: 1,backgroundColor:'blue',margin: 8}}>
               <Text>Ver fotos salvas</Text>
           </TouchableOpacity>
         </View>

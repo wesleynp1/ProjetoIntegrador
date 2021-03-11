@@ -12,7 +12,7 @@ class ProdutoContent
   {
      var produtoSelecionado =  this.produtos.find(p => p.id==id);
 
-     if(produtoSelecionado==undefined)produtoSelecionado={id: null, nome: null, preco: null};
+     if(produtoSelecionado==undefined)produtoSelecionado={id: null, nome: null, imagem:null, preco: null};
 
       console.log('Produto Selecionado: '+produtoSelecionado.nome);
       
@@ -47,7 +47,7 @@ class ProdutoContent
 
   adicionarProduto(produto)
   {
-    this.BD.addProduto({nome: produto.nome, preco: produto.preco}).then((result)=>{
+    this.BD.addProduto({nome: produto.nome, imagem: produto.imagem, preco: produto.preco}).then((result)=>{
       console.log('ProdutoContent: PRODUTO ADICIONADO!!');
     }).then(()=>{}).catch((erro)=>{});
   }
