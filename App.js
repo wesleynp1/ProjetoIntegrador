@@ -31,25 +31,26 @@ class App extends Component
     super(props);
 
     VC.App = this;
-    this.paginaEstatistica = null;    
+    PC.App = this;
+    this.paginaEstatistica = null;
+    this.paginaRegistrarVendas = null;
   }
 
   render()
   {
-    let pagVendas = ()=>{return(<RegistrarVendas vendasControle={VC} produtosControle={PC}/>);}
-
     return(
       <NavigationContainer>
           <Tab.Navigator>
-            <Tab.Screen name="Página Inicial">
-              
+            <Tab.Screen name="Página Inicial">          
               {()=>{return <PaginaInicial ref={PagEstatistica=>{this.paginaEstatistica = PagEstatistica}}  vendasControle={VC}/>}}
             </Tab.Screen>
 
             <Tab.Screen name={'Registrar Produto'}>
             {()=>{return this.renderStackProdutos()}}
             </Tab.Screen>
-            <Tab.Screen name={'Registrar Venda'} component={pagVendas}/>
+            <Tab.Screen name={'Registrar Venda'}>
+            {()=>{return <RegistrarVendas ref={PagRegistrarVendas=>{this.paginaRegistrarVendas = PagRegistrarVendas}} vendasControle={VC} produtosControle={PC}/>}}
+            </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
     );
@@ -76,7 +77,11 @@ class App extends Component
   
   atualizarPaginas()
   {
+    
+    console.log("Atualizar pagina VENDAS"+this.paginaRegistrarVendas)
+    console.log("Atualizar pagina ESTATISTICA"+this.paginaEstatistica)
     this.paginaEstatistica.atualizar();
+    this.paginaRegistrarVendas.atualizar();
   }
 }
 

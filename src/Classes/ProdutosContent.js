@@ -3,7 +3,7 @@ class ProdutoContent
   constructor(bancoDeDados)
   {
       this.produtos =   [];
-      
+      this.App = null
       this.BD = bancoDeDados;
       this.BuscarProdutosNoBancoDeDados();
   }
@@ -26,6 +26,7 @@ class ProdutoContent
       this.produtos = ProdutosBD;
       console.log('FIM DA EXECUÇÃO DE BUSCAR PRODUTOS')
       this.imprimirProdutos();
+      if(this.App!=null)this.App.atualizarPaginas();
       resolve(ProdutosBD);
     }).catch((erro)=>{
         console.log('Deu ruim: '+erro);
