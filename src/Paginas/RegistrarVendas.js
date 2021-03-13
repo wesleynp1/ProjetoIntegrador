@@ -20,9 +20,15 @@ class RegistrarVendas extends Component
       <ScrollView style={{flex: 1,backgroundColor: 'blue'}}>
         <Text style={TextoPadrão.TituloDaPagina}>Registrar Vendas</Text>
 
+        <Text style={TextoPadrão.TituloCampoDigitacao}>Data</Text>
         <TextInput style={TextoPadrão.Digitado} onChangeText={(t)=>this.novaVenda.data=t} placeholderTextColor="white" placeholder={'Digite a data da venda formato DD-MM-AAAA'}/>
+
+        <Text style={TextoPadrão.TituloCampoDigitacao}>Produto</Text>
         <TextInput style={TextoPadrão.Digitado} onChangeText={(t)=>this.renderProdutoSelecionado(t)} placeholderTextColor="white" placeholder={'Digite o ID do produto aqui(apenas números)'} keyboardType="numeric"/>
+        
         <Text style={TextoPadrão.NomeProduto}>{this.state.produtoSelecionado}</Text>
+
+        <Text style={TextoPadrão.TituloCampoDigitacao}>Unidades</Text>
         <TextInput style={TextoPadrão.Digitado} onChangeText={(t)=>this.novaVenda.quantidade=t} placeholderTextColor="white" placeholder={'Digite Quantas unidades vendeu'} keyboardType="numeric"/>
         
         <Button title='Registrar nova venda' onPress={()=>{this.props.vendasControle.addVenda(this.novaVenda);this.atualizarListaDeVendas();}}/>

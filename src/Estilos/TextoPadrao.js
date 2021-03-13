@@ -23,6 +23,10 @@ const TextoPadrao = StyleSheet.create({
         fontSize:  12,
         color: 'white'
     },
+    TituloCampoDigitacao: {
+        fontSize:  12,
+        color: 'gray'
+    },
     CorpoDoTexto: {
         fontSize:  18,
     },

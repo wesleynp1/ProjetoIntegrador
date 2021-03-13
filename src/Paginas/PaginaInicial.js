@@ -12,6 +12,8 @@ class PaginaInicial extends Component
 
   render()
   {
+    let mediaDePreco = this.totalQuantidade()!=0 ? (this.totalVendido()/this.totalQuantidade()).toFixed(2) : 0
+
     return(
       <View style={{flex: 1,backgroundColor: 'green'}}>
         <Text style={TextoPadrão.TituloDaPagina}>Pagina inicial</Text>
@@ -19,7 +21,7 @@ class PaginaInicial extends Component
         
         <View style={{borderWidth: 2, borderColor: 'white'}}>   
           <Text style={TextoPadrão.Estatistica}>Total Vendido:</Text>
-          <Text style={TextoPadrão.Estatistica}>R$ {this.totalVendido()}</Text>
+          <Text style={TextoPadrão.Estatistica}>R$ {(this.totalVendido()).toFixed(2)}</Text>
         </View>
 
         <View style={{borderWidth: 2, borderColor: 'white'}}>   
@@ -29,7 +31,7 @@ class PaginaInicial extends Component
 
         <View style={{borderWidth: 2, borderColor: 'white'}}>   
           <Text style={TextoPadrão.Estatistica}>Média de preço por unidade vendida</Text>
-          <Text style={TextoPadrão.Estatistica}>R$ {this.totalVendido()/this.totalQuantidade()} por unidades</Text>
+          <Text style={TextoPadrão.Estatistica}>R$ {mediaDePreco} por unidades</Text>
         </View>
       </View>
     );

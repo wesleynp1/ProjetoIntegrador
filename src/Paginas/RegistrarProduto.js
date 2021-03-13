@@ -24,6 +24,7 @@ class RegistrarProduto extends Component
      if(this.props.rota.params!=undefined)
      {
       imagem = {uri:this.props.rota.params.imagem}
+      this.NovoProduto.imagem = this.props.rota.params.imagem;
      }
   
     return(
@@ -31,17 +32,22 @@ class RegistrarProduto extends Component
         <View style={{backgroundColor: 'red'}}>
           <Text style={TextoPadrão.TituloDaPagina}>Registrar Produtos</Text>
 
-          <View style={{alignItems:'center'}}>
-            
-            <TouchableOpacity onPress={()=>{this.props.navegacao.navigate('Foto do Produto')}} style={{width:96,height:96,backgroundColor:'grey',alignItems:'center'}}>
+          <View style={{alignItems:'center'}}>            
+            <TouchableOpacity onPress={()=>{this.props.navegacao.navigate('Foto do Produto')}} style={{width:96,height:96,backgroundColor:'grey',margin: 4,alignItems:'center'}}>
               <Image style={{width: 96,height: 96, margin: 5,padding:5}} source={imagem}/>
             </TouchableOpacity>
 
-            <TextInput style={TextoPadrão.Digitado} placeholderTextColor="white" onChangeText={(t)=>this.NovoProduto.nome=t} placeholder={'Digite o nome do produto aqui'}/>
-            <TextInput style={TextoPadrão.Digitado} placeholderTextColor="white" onChangeText={(t)=>this.NovoProduto.preco=t} placeholder={'Digite o preço do produto aqui(apenas números)'} keyboardType="numeric"/>
-            <Button title='Registrar produto' onPress={this.registrarProduto}/>
+            <View style={{alignItems:'stretch'}}>
+              <Text style={TextoPadrão.TituloCampoDigitacao}>Nome do produto</Text>
+              <TextInput style={TextoPadrão.Digitado} placeholderTextColor="white" onChangeText={(t)=>this.NovoProduto.nome=t} placeholder={'Digite o nome do produto aqui'}/>
+              
+              <Text style={TextoPadrão.TituloCampoDigitacao}>Preço</Text>
+              <TextInput style={TextoPadrão.Digitado} placeholderTextColor="white" onChangeText={(t)=>this.NovoProduto.preco=t} placeholder={'Digite o preço do produto aqui(só números)'} keyboardType="numeric"/>
+              <Button title='Registrar produto' onPress={this.registrarProduto}/>
+            </View>
 
             <Text style={TextoPadrão.SubTitulo1}>Número total de produtos: {this.state.produtos.length}</Text>
+
             <View>
                 {this.renderProdutos()}
             </View>
@@ -61,19 +67,27 @@ class RegistrarProduto extends Component
       {
         let imagem = require('../Imagens/SemFotoProduto.png')
 
-        if(arrayProdutos[i].imagem!=undefined)
+        if(arrayProdutos[i].imagem!=null)
         {
           imagem = {uri:arrayProdutos[i].imagem};
         }
 
         CompProdutos.push
         (
-          <View key={i} style={{backgroundColor: 'white',margin: 4, padding: 8}}>
-            <Image key={i} style={{width: 96,height: 96, margin: 5,padding:5}} source={imagem}/>
-            <Text style={TextoPadrão.CorpoDoTexto}>ID: {arrayProdutos[i].id}</Text>
-            <Text style={TextoPadrão.CorpoDoTexto}>Nome do produto: {arrayProdutos[i].nome}</Text>
-            <Text style={TextoPadrão.CorpoDoTexto}>Preço: {arrayProdutos[i].preco}</Text>
-            <Button title='excluir' onPress={()=>{this.apagarProdutoPeloID(arrayProdutos[i].id)}}/>
+          <View key={i} style={{backgroundColor: 'white', margin:5, padding:5,width:"98%",height:100, flexDirection:'row'}}>
+
+            <Image style={{width:80,height:80}} key={i} source={imagem}/>
+            
+            <View style={{flex:1,margin:4}}>
+              <Text style={TextoPadrão.CorpoDoTexto}>ID: {arrayProdutos[i].id}</Text>
+              <Text style={TextoPadrão.CorpoDoTexto}>Produto: {arrayProdutos[i].nome}</Text>
+              <Text style={TextoPadrão.CorpoDoTexto}>Preço: {arrayProdutos[i].preco}</Text>
+            </View>
+
+            <TouchableOpacity style={{backgroundColor:'gray',width:80,height:80,justifyContent:'center',alignItems:'center'}} onPress={()=>{this.apagarProdutoPeloID(arrayProdutos[i].id)}}>
+              <Text style={{fontSize:20}}>X</Text>  
+            </TouchableOpacity>
+
           </View>
         );
       }
