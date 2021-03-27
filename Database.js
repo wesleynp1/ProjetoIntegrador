@@ -142,9 +142,7 @@ export default class Database{
       this.IniciaBD().then((db)=>{
         db.transaction((tx)=>{
           tx.executeSql('INSERT INTO Vendas(Quantidade,dataVenda,IdProd) VALUES (?, ?, ?)',[novaVenda.quantidade, novaVenda.data, novaVenda.produto.id]);
-        }).then(()=>{
-          console.log('AddVenda: EXECUTADO COM SUCESSO');
-        })
+        }).then(()=>{})
       });
     });
   }
@@ -155,7 +153,6 @@ export default class Database{
 
       this.IniciaBD().then((db) => {
         db.transaction((tx) => {
-          console.log('INICIANDO LISTA DE VENDAS')
           tx.executeSql('SELECT * FROM Vendas', []).then(([tx,results]) => {
             var len = results.rows.length;
             

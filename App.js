@@ -77,9 +77,6 @@ class App extends Component
   
   atualizarPaginas()
   {
-    
-    console.log("Atualizar pagina VENDAS"+this.paginaRegistrarVendas)
-    console.log("Atualizar pagina ESTATISTICA"+this.paginaEstatistica)
     this.paginaEstatistica.atualizar();
     this.paginaRegistrarVendas.atualizar();
   }

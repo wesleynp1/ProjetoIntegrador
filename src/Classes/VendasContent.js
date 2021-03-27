@@ -14,13 +14,11 @@ class VendasContent
   BuscarVendasNoBancoDeDados()
   {
         return new Promise((resolve)=>{this.BD.listaDeVendas().then((VendasComIdProd)=>{
-        console.log('TAMANHO DO ARRAY RETORNANDO AS VENDAS: '+ VendasComIdProd.length)
 
         let arrayDeVendas = [];
 
         for (let i = 0; i < VendasComIdProd.length; i++)
         {
-            console.log('ID da venda: '+VendasComIdProd[i].id)
 
             arrayDeVendas.push({
                     id: VendasComIdProd[i].id,
@@ -40,14 +38,12 @@ class VendasContent
   addVenda(novaVenda)
   {
         this.BD.addVenda({data: novaVenda.data, produto: novaVenda.produto, quantidade: novaVenda.quantidade}).then((result)=>{
-        console.log('NOVA VENDA ADICIONADA COM SUCESSO!!!');
         this.BuscarVendasNoBancoDeDados();
     }).then(()=>{}).catch((erro)=>{});
   }
 
   apagarVendaPorId(id){
         this.BD.apagarVendaPorId(id).then((result)=>{
-        console.log('VENDA APAGADA COM SUCESSO! + '+ result);
         this.BuscarVendasNoBancoDeDados();
     });
   }

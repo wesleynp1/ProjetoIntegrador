@@ -98,7 +98,7 @@ class RegistrarProduto extends Component
   registrarProduto()
   {
     console.log(">>>>>>>>this.NovoProduto.imagem:"+this.NovoProduto.imagem);
-    this.props.produtosControle.adicionarProduto(this.NovoProduto);
+    this.props.produtosControle.adicionarProdutoREST(this.NovoProduto);
     this.atualizaListaDeProdutos();
   }
 
