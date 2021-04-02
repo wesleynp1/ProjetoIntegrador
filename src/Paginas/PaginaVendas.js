@@ -3,7 +3,7 @@ import {ScrollView, View, Text, TextInput, Button} from 'react-native';
 import TextoPadrão from '../Estilos/TextoPadrao';
 import {Picker}  from '@react-native-picker/picker';
 
-class RegistrarVendas extends Component
+class PaginaVendas extends Component
 {
   constructor(props)
   {
@@ -11,15 +11,22 @@ class RegistrarVendas extends Component
 
     this.state = {produtoSelecionado: null};
     this.novaVenda = {data: null,produto: null, quantidade: 0};
+
     this.renderVendas = this.renderVendas.bind(this);
     this.renderProdutoSelecionado  =this.renderProdutoSelecionado.bind(this);
-    this.atualizar = this.atualizar.bind(this);
   }
 
   render()
   {
 
-
+    if(this.props.loading)
+    {
+      return(<View style={{flex:1, backgroundColor: 'blue'}}>
+          <Text style={TextoPadrão.TituloDaPagina}>Carregando...</Text>
+        </View>)
+    }
+    else
+    {
     return(
       <ScrollView style={{flex: 1,backgroundColor: 'blue'}}>
         <Text style={TextoPadrão.TituloDaPagina}>Registrar Vendas</Text>
@@ -39,11 +46,12 @@ class RegistrarVendas extends Component
         <Text style={TextoPadrão.TituloCampoDigitacao}>Unidades</Text>
         <TextInput style={TextoPadrão.Digitado} onChangeText={(t)=>this.novaVenda.quantidade=t} placeholderTextColor="white" placeholder={'Digite Quantas unidades vendeu'} keyboardType="numeric"/>
         
-        <Button title='Registrar nova venda' onPress={()=>{this.props.vendasControle.addVenda(this.novaVenda);this.atualizarListaDeVendas();}}/>
+        <Button title='Registrar nova venda' onPress={()=>{this.props.vendasControle.adicionarVendaREST(this.novaVenda);}}/>
 
         {this.renderVendas()}
       </ScrollView>
     );
+    }
   }
 
   listaDeProdutosPicker()
@@ -79,25 +87,14 @@ class RegistrarVendas extends Component
           <Text>Preço por unidade: {preco}</Text>
           <Text>Quantidade: {quantidade}</Text>
           <Text>Total da venda: {preco*quantidade}</Text>
-          <Button title='excluir' onPress={()=>{this.props.vendasControle.apagarVendaPorId(arrayVendas[i].id);this.atualizarListaDeVendas()}}/>
+          <Button title='excluir' 
+          onPress={()=>{this.props.vendasControle.removerVendaREST(arrayVendas[i].id)}}/>
       </View>
       );
       }
 
       return CompVendas;
   }
-
-  atualizar()
-  {
-    this.forceUpdate();
-  }
-
-  atualizarListaDeVendas()
-  {
-    this.props.vendasControle.BuscarVendasNoBancoDeDados().then((vendas)=>{
-      this.forceUpdate();
-    })
-  }
 }
 
-export default RegistrarVendas;
+export default PaginaVendas;

@@ -5,9 +5,11 @@ class ProdutoContent
   constructor(bancoDeDados)
   {
       this.produtos =   [];
-      this.App = null
+      this.App = null;
       this.BD = bancoDeDados;
-      this.BuscarProdutosNoREST();
+
+      this.iniciarLoadingDasPaginas = ()=>{console.log("função 'iniciarLoadingDasPaginas' vazia")};
+      this.FinalizarLoadingDasPaginas = ()=>{console.log("função 'FinalizarLoadingDasPaginas' vazia")};
   }
 
   ProdutoPeloId(id)
@@ -39,7 +41,7 @@ class ProdutoContent
   adicionarProduto(produto)
   {
     this.BD.addProduto({nome: produto.nome, imagem: produto.imagem, preco: produto.preco}).then((result)=>{
-    }).then(()=>{}).catch((erro)=>{});
+    }).catch((erro)=>{});
   }
 
   apagarTodosProdutos()
@@ -48,8 +50,10 @@ class ProdutoContent
   }
 
   //REST
-  BuscarProdutosNoREST()
+  BuscarProdutosNoREST(posBusca=null)
   {
+      this.iniciarLoadingDasPaginas();
+
       fetch("http://192.168.0.109:5000/Produtos")
       .then(response => response.json())
       .then((dadosJson) => {
@@ -59,17 +63,16 @@ class ProdutoContent
           var novoProduto = {id: dadosJson[i].id, nome: dadosJson[i].nome, imagem: dadosJson[i].imagem, preco: dadosJson[i].preco};
           ProdutosREST.push(novoProduto);
         }
-        this.produtos = ProdutosREST
-      })
-
-      .catch((erro)=>{console.log('Deu ruim no REST: '+erro);})
-
+        this.produtos = ProdutosREST;
+        this.FinalizarLoadingDasPaginas();
+        if(posBusca!=null)posBusca();
+      })        
+      .catch((erro)=>{console.log('Deu ruim no REST: '+erro);});
   }
 
   adicionarProdutoREST(produto)
   {
-
-    console.log(">>>>>>>>>>>>>>>>>adicionarProdutoREST: "+produto.nome)
+    this.iniciarLoadingDasPaginas();
 
     let parametros = {
       method:'POST',
@@ -84,17 +87,36 @@ class ProdutoContent
       })
   }
 
-  console.log(">>>>>>>>>>>>>>>>>adicionarProdutoREST: "+parametros.body);
-
     fetch("http://192.168.0.109:5000/Produtos", parametros)
         .then(response => response.json())
         .then((dadosJson) => {
-            ToastAndroid.show("Produto #" + dadosJson.nome + " cadastrado", ToastAndroid.SHORT);
+            ToastAndroid.show("Produto " + dadosJson.nome + " cadastrado", ToastAndroid.SHORT);
+            this.BuscarProdutosNoREST();
+            this.FinalizarLoadingDasPaginas();
         })
         .catch(error => console.log("Falha ao gravar dados no REST: " + error));
   }
+
+  removerProdutoREST(id)
+  {
+    let parametros = {
+      method:'DELETE',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+      }
+  }
+
+    this.iniciarLoadingDasPaginas();
+    fetch("http://192.168.0.109:5000/Produtos?id="+id, parametros)
+        .then(response => response.json())
+        .then((dadosJson) => {
+            ToastAndroid.show("Produto N#" + dadosJson.id + " exluido com sucesso!", ToastAndroid.SHORT);
+            this.BuscarProdutosNoREST();
+            this.FinalizarLoadingDasPaginas();
+        })
+        .catch(error => console.log("Falha ao remover dados no REST: " + error));
+  }
 }
-
-
 
 export default ProdutoContent;

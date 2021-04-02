@@ -2,19 +2,13 @@ import React,{Component} from 'react';
 import {View, ScrollView, Text, TextInput, Button, TouchableOpacity,Image} from 'react-native';
 import TextoPadrão from '../Estilos/TextoPadrao';
 
-class RegistrarProduto extends Component
+class PaginaProdutos extends Component
 {
   constructor(props)
   {
     super(props)
-
-    this.state = {produtos: this.props.produtosControle.produtos}
-
     this.NovoProduto = {nome: null,preco: null,imagem: null}
-
     this.renderProdutos = this.renderProdutos.bind(this);
-    this.registrarProduto = this.registrarProduto.bind(this);
-    this.apagarTodosProdutos = this.apagarTodosProdutos.bind(this);
   }
 
   render()
@@ -27,7 +21,16 @@ class RegistrarProduto extends Component
       this.NovoProduto.imagem = this.props.rota.params.imagem;
      }
   
-    return(
+    
+      if(this.props.loading)
+      {
+        return(<View style={{flex:1, backgroundColor: 'red'}}>
+          <Text style={TextoPadrão.TituloDaPagina}>Carregando...</Text>
+        </View>)
+      }
+      else
+      {
+      return(
       <ScrollView>
         <View style={{backgroundColor: 'red'}}>
           <Text style={TextoPadrão.TituloDaPagina}>Registrar Produtos</Text>
@@ -43,10 +46,10 @@ class RegistrarProduto extends Component
               
               <Text style={TextoPadrão.TituloCampoDigitacao}>Preço</Text>
               <TextInput style={TextoPadrão.Digitado} placeholderTextColor="white" onChangeText={(t)=>this.NovoProduto.preco=t} placeholder={'Digite o preço do produto aqui(só números)'} keyboardType="numeric"/>
-              <Button title='Registrar produto' onPress={this.registrarProduto}/>
+              <Button title='Registrar produto' onPress={()=>{this.props.produtosControle.adicionarProdutoREST(this.NovoProduto)}}/>
             </View>
 
-            <Text style={TextoPadrão.SubTitulo1}>Número total de produtos: {this.state.produtos.length}</Text>
+            <Text style={TextoPadrão.SubTitulo1}>Número total de produtos: {this.props.produtosControle.produtos.length}</Text>
 
             <View>
                 {this.renderProdutos()}
@@ -54,13 +57,13 @@ class RegistrarProduto extends Component
           </View>
 
         </View>
-      </ScrollView>
-    );
+      </ScrollView>)
+      }
   }
   
   renderProdutos()
   {
-      var arrayProdutos = this.state.produtos;
+      var arrayProdutos = this.props.produtosControle.produtos;
       var CompProdutos = [];
 
       for(let i=0;i<arrayProdutos.length;i++)
@@ -84,8 +87,9 @@ class RegistrarProduto extends Component
               <Text style={TextoPadrão.CorpoDoTexto}>Preço: {arrayProdutos[i].preco}</Text>
             </View>
 
-            <TouchableOpacity style={{backgroundColor:'gray',width:80,height:80,justifyContent:'center',alignItems:'center'}} onPress={()=>{this.apagarProdutoPeloID(arrayProdutos[i].id)}}>
-              <Text style={{fontSize:20}}>X</Text>  
+            <TouchableOpacity style={{backgroundColor:'gray',width:80,height:80,justifyContent:'center',alignItems:'center'}} 
+                              onPress={()=>{this.props.produtosControle.removerProdutoREST(arrayProdutos[i].id)}}>
+              <Text style={{fontSize:20}}>X</Text>
             </TouchableOpacity>
 
           </View>
@@ -95,35 +99,10 @@ class RegistrarProduto extends Component
       return CompProdutos;
   }
 
-  registrarProduto()
-  {
-    console.log(">>>>>>>>this.NovoProduto.imagem:"+this.NovoProduto.imagem);
-    this.props.produtosControle.adicionarProdutoREST(this.NovoProduto);
-    this.atualizaListaDeProdutos();
-  }
-
   apagarProdutoPeloID(id)
   {
-    this.props.produtosControle.apagarProdutoPeloID(id);
-    this.atualizaListaDeProdutos();
+    ;
   }
-  
-  apagarTodosProdutos()
-  {
-    this.props.produtosControle.apagarTodosProdutos();
-    this.atualizaListaDeProdutos();
-  }  
-  
-  atualizaListaDeProdutos()
-  {
-    this.props.produtosControle.BuscarProdutosNoBancoDeDados().then((ProdutosBD)=>{
-      console.log('RegistrarProduto: FIM DA EXECUÇÃO DE adicionarProduto');
-      this.NovoProduto = {nome: null,preco: null}
-      this.setState({produtos: ProdutosBD});
-    });
-  }
-
-  
 }
 
-export default RegistrarProduto;
+export default PaginaProdutos;

@@ -6,8 +6,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator} from '@react-navigation/stack';
 
 import PaginaInicial from './src/Paginas/PaginaInicial';
-import RegistrarProduto from './src/Paginas/RegistrarProduto';
-import RegistrarVendas from './src/Paginas/RegistrarVendas';
+import PaginaProdutos from './src/Paginas/PaginaProduto';
+import PaginaVendas from './src/Paginas/PaginaVendas';
 import PaginaCamera from './src/Paginas/PaginaCamera';
 import PaginaGaleria from './src/Paginas/PaginaGaleria';
 
@@ -26,30 +26,49 @@ const VC = new VendasContent(db,PC);
 
 class App extends Component
 {
-  constructor(props)
+  constructor(props) 
   {
     super(props);
 
     VC.App = this;
     PC.App = this;
-    this.paginaEstatistica = null;
-    this.paginaRegistrarVendas = null;
+
+    this.state={loading:true}
+
+    PC.iniciarLoadingDasPaginas = ()=>{this.setState({loading: true})};
+    PC.FinalizarLoadingDasPaginas = ()=>{this.setState({loading: false})};
+
+    VC.iniciarLoadingDasPaginas = ()=>{this.setState({loading: true})};
+    VC.finalizarLoadingDasPaginas = ()=>{this.setState({loading: false})};
+  }
+
+  componentDidMount()
+  {
+    PC.BuscarProdutosNoREST(()=>{VC.BuscarVendasNoREST()});//BuscarVendas será executado após BuscarProdutos
   }
 
   render()
-  {
-    return(
+  {    
+  return(
       <NavigationContainer>
           <Tab.Navigator>
             <Tab.Screen name="Página Inicial">          
-              {()=>{return <PaginaInicial ref={PagEstatistica=>{this.paginaEstatistica = PagEstatistica}}  vendasControle={VC}/>}}
+              {()=>{return <PaginaInicial loading = {this.state.loading}
+                                          IniciarLoading={()=>{this.setState({loading:true})}}
+                                          FinalizarLoading={()=>{this.setState({loading:false})}}
+                                          vendasControle={VC}/>}}
             </Tab.Screen>
 
             <Tab.Screen name={'Registrar Produto'}>
-            {()=>{return this.renderStackProdutos()}}
+              {()=>{return this.renderStackProdutos()}}
             </Tab.Screen>
+
             <Tab.Screen name={'Registrar Venda'}>
-            {()=>{return <RegistrarVendas ref={PagRegistrarVendas=>{this.paginaRegistrarVendas = PagRegistrarVendas}} vendasControle={VC} produtosControle={PC}/>}}
+              {()=>{return <PaginaVendas  loading = {this.state.loading}
+                                          IniciarLoading={()=>{this.setState({loading:true})}}
+                                          FinalizarLoading={()=>{this.setState({loading:false})}}
+                                          vendasControle={VC} 
+                                          produtosControle={PC}/>}}
             </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
@@ -61,7 +80,11 @@ class App extends Component
     return(
     <Stack.Navigator screenOptions={{headerShown:false}}>
       <Stack.Screen name='PaginaProdutos'>
-        {({route,navigation})=>{return(<RegistrarProduto rota={route} navegacao={navigation} produtosControle={PC}/>);}}
+        {({route,navigation})=>{return(<PaginaProdutos  IniciarLoading={()=>{this.setState({loading:true})}}
+                                                        FinalizarLoading={()=>{this.setState({loading:false})}}
+                                                        loading = {this.state.loading}
+                                                        rota={route} navegacao={navigation} 
+                                                        produtosControle={PC}/>);}}
       </Stack.Screen>
 
       <Stack.Screen options={{headerShown:true}} name='Foto do Produto'>
@@ -73,12 +96,6 @@ class App extends Component
       </Stack.Screen>
     </Stack.Navigator>
     );
-  }
-  
-  atualizarPaginas()
-  {
-    this.paginaEstatistica.atualizar();
-    this.paginaRegistrarVendas.atualizar();
   }
 }
 
